@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(AudioSource))]
 public class Track : MonoBehaviour
@@ -9,33 +10,30 @@ public class Track : MonoBehaviour
     [SerializeField] private AudioClip Clip;
     private AudioSource audioSource;
 
-    private float bpm = 120.0f;
     private int stepCount = 8;
 
-    private Coroutine sequence;
+    public bool Mute, Solo;
+    public Dictionary<int, bool> stepsActive = new();
     
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = Clip;
-    }
-
-    public void OnPlay()
-    {
-        sequence = StartCoroutine(Sequence());
-    }
-    
-    public void OnStop()
-    {
-        StopCoroutine(sequence);
-    }
-
-    private IEnumerator Sequence()
-    {
+        
+        stepsActive = new Dictionary<int, bool>();
         for (int i=0; i < stepCount; i++)
         {
-            audioSource.Play();
-            yield return new WaitForSeconds(60.0f / bpm);
+            stepsActive.Add(i, false);
         }
+
+        stepsActive[0] = true;
+        stepsActive[2] = true;
+        stepsActive[5] = true;
+        stepsActive[7] = true;
+    }
+
+    public void Play()
+    {
+        audioSource.Play();
     }
 }
