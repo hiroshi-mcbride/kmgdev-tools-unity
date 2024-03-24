@@ -5,6 +5,7 @@ using UnityEngine;
 [Serializable]
 public struct TrackData
 {
+    public int Index;
     public string Name;
     public AudioClip Clip;
     public bool Mute, Solo;
