@@ -10,17 +10,16 @@ public class FileManager : MonoBehaviour
     private event FileBrowser.OnSuccess onLoadSuccess;
     private event FileBrowser.OnSuccess onSaveSuccess;
 
-    private event FileBrowser.OnCancel onCancel;
     
 
     public void OnLoad()
     { 
-        FileBrowser.ShowLoadDialog(onLoadSuccess, onCancel, FileBrowser.PickMode.Files);
+        FileBrowser.ShowLoadDialog(onLoadSuccess, null, FileBrowser.PickMode.Files);
     }
     
     public void OnSave()
     {
-        FileBrowser.ShowSaveDialog(onSaveSuccess, onCancel, FileBrowser.PickMode.Files);
+        FileBrowser.ShowSaveDialog(onSaveSuccess, null, FileBrowser.PickMode.Files);
     }
 
     private void ReadFile(string[] _paths)
@@ -38,11 +37,6 @@ public class FileManager : MonoBehaviour
     {
         
     }
-
-    private void OnLoadCanceled()
-    {
-        
-    }
     
     private void Start()
     {
@@ -56,13 +50,11 @@ public class FileManager : MonoBehaviour
     {
         onLoadSuccess += ReadFile;
         onSaveSuccess += WriteFile;
-        onCancel += OnLoadCanceled;
     }
     
     private void OnDisable()
     {
         onLoadSuccess -= ReadFile;
         onSaveSuccess -= WriteFile;
-        onCancel -= OnLoadCanceled;
     }
 }
