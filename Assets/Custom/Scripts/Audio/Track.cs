@@ -18,22 +18,7 @@ public class Track : MonoBehaviour
     private double interval;
     private double nextEventTime;
     
-    public void Play(double _bpm)
-    {
-        if (Mute) return;
-        if (!stepButtons.Any(_x => _x.Value.Active)) return;
-        interval = 60.0f / _bpm;
-        currentStep = 0;
-        stepCount = stepButtons.Count;
-        nextEventTime = AudioSettings.dspTime;
-        isPlaying = true;
-    }
     
-    public void Stop()
-    {
-        audioSource.Stop();
-    }
-
     public void Initialize(TrackData _trackData)
     {
         Mute = _trackData.Mute;
@@ -49,8 +34,47 @@ public class Track : MonoBehaviour
             sb.Active = step.Active;
             stepButtons.Add(step.Index, sb);
         }
+        
+        // order each step by its index to ensure correct playback order.
         stepButtons = stepButtons.OrderBy(_x => _x.Key).ToDictionary(_x => _x.Key, _x => _x.Value);
     }
+    
+    
+    public void Play(double _bpm)
+    {
+        if (Mute) return;
+        if (!stepButtons.Any(_x => _x.Value.Active)) return;
+        interval = 60.0f / _bpm;
+        currentStep = 0;
+        stepCount = stepButtons.Count;
+        nextEventTime = AudioSettings.dspTime;
+        isPlaying = true;
+    }
+    
+    
+    public void Stop()
+    {
+        audioSource.Stop();
+    }
+
+    public TrackData GetTrackData()
+    {
+        return new TrackData
+        {
+            Mute = Mute,
+            Solo = Solo,
+            Steps = stepButtons.Values
+                .Select(_x => new StepData
+                {
+                    Active = _x.Active,
+                    Index = _x.Index
+                })
+                .ToArray()
+        };
+        
+    }
+    
+    
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -62,7 +86,7 @@ public class Track : MonoBehaviour
         {
             double time = AudioSettings.dspTime;
 
-            if (currentStep >= stepCount)
+            if (currentStep >= stepButtons.Count || currentStep >= stepCount)
             {
                 currentStep = 0;
                 isPlaying = false;

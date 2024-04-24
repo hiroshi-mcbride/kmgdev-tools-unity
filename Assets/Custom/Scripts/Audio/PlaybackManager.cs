@@ -7,6 +7,19 @@ public class PlaybackManager : MonoBehaviour
     private Coroutine sequence;
     private double bpm = 120.0f;
     
+    public int StepCount
+    {
+        get => stepCount;
+        set
+        {
+            if (stepCount != value)
+            {
+                // event manager invoke step count changed
+            }
+
+            stepCount = value;
+        }
+    }
     private int stepCount = 8;
     
     

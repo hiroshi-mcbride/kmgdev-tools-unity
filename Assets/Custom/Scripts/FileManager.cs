@@ -7,19 +7,19 @@ using SimpleFileBrowser;
 
 public class FileManager : MonoBehaviour
 {
-    private event FileBrowser.OnSuccess onLoadSuccess;
-    private event FileBrowser.OnSuccess onSaveSuccess;
+    private event FileBrowser.OnSuccess OnLoadSuccess;
+    private event FileBrowser.OnSuccess OnSaveSuccess;
 
     
 
     public void OnLoad()
     { 
-        FileBrowser.ShowLoadDialog(onLoadSuccess, null, FileBrowser.PickMode.Files);
+        FileBrowser.ShowLoadDialog(OnLoadSuccess, null, FileBrowser.PickMode.Files);
     }
     
     public void OnSave()
     {
-        FileBrowser.ShowSaveDialog(onSaveSuccess, null, FileBrowser.PickMode.Files);
+        FileBrowser.ShowSaveDialog(OnSaveSuccess, null, FileBrowser.PickMode.Files);
     }
 
     private void ReadFile(string[] _paths)
@@ -35,26 +35,31 @@ public class FileManager : MonoBehaviour
 
     private void WriteFile(string[] _paths)
     {
-        
+        using (StreamWriter writer = new(_paths[0]))
+        {
+            //writer.WriteLine();
+            writer.Close();
+            
+        }
     }
     
     private void Start()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter("", ".mfsp"));
         
-        // HideDialog initializes the file browser, preventing lag when opening the dialog
+        // HideDialog initializes the file browser, so doing this on startup prevents lag when opening the dialog
         FileBrowser.HideDialog();
     }
     
     private void OnEnable()
     {
-        onLoadSuccess += ReadFile;
-        onSaveSuccess += WriteFile;
+        OnLoadSuccess += ReadFile;
+        OnSaveSuccess += WriteFile;
     }
     
     private void OnDisable()
     {
-        onLoadSuccess -= ReadFile;
-        onSaveSuccess -= WriteFile;
+        OnLoadSuccess -= ReadFile;
+        OnSaveSuccess -= WriteFile;
     }
 }

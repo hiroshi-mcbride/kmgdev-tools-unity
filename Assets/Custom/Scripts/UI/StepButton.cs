@@ -38,9 +38,3 @@ public class StepButton : MonoBehaviour, IPointerClickHandler
     }
 }
 
-[Serializable]
-public struct StepData
-{
-    public bool Active;
-    public int Index;
-}
