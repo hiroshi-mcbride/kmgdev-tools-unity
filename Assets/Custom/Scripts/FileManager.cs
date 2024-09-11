@@ -10,7 +10,13 @@ public class FileManager : MonoBehaviour
     private event FileBrowser.OnSuccess OnLoadSuccess;
     private event FileBrowser.OnSuccess OnSaveSuccess;
 
-    
+    private ProjectManager projectManager;
+
+    private void Awake()
+    {
+        ServiceLocator.TryLocate(Strings.ProjectManager, out projectManager);
+    }
+
 
     public void OnLoad()
     { 
@@ -19,6 +25,7 @@ public class FileManager : MonoBehaviour
     
     public void OnSave()
     {
+        
         FileBrowser.ShowSaveDialog(OnSaveSuccess, null, FileBrowser.PickMode.Files);
     }
 

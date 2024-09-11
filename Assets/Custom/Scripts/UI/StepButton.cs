@@ -11,8 +11,11 @@ public class StepButton : MonoBehaviour, IPointerClickHandler
         get => active;
         set
         {
+            
             ColorBlock buttonColors = button.colors;
-            buttonColors.normalColor = value ? Color.black : Color.white;
+            buttonColors.normalColor = value ? Color.green : Color.red;
+            buttonColors.selectedColor = value ? Color.green : Color.red;
+            buttonColors.pressedColor = value ? Color.green : Color.red;
             button.colors = buttonColors;
             active = value;
         }

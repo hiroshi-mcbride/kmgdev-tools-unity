@@ -16,6 +16,13 @@ public static class ServiceLocator
         bool found = directory.TryGetValue(_name, out _service);
         return found;
     }
+    
+    public static bool TryLocate<T>(string _name, out T _service)
+    {
+        bool found = directory.TryGetValue(_name, out var s);
+        _service = (T)s;
+        return found;
+    }
 
     public static void Remove(string _name)
     {

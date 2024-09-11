@@ -18,15 +18,6 @@ public class NameInputField : MonoBehaviour, ISubmitHandler
 
     public void OnSubmit(BaseEventData eventData)
     {
-        if (inputField.text == "")
-        {
-            Debug.Log("Name cannot be empty");
-            inputField.Select();
-            inputField.ActivateInputField();
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        gameObject.SetActive(false);
     }
 }
